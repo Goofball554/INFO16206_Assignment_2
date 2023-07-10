@@ -95,13 +95,13 @@ function initApp(){
                } // This ends the "if (data.section)".
                else {
                    //8. (else) If not able to parse data -> show "Error: Incorrect input received from the server!" error message.
-                   
+                   alert("Error: Incorrect input received from the server!");
                }
             } // This ends the "if (this.status == 200)"
             //9. (else) If server returns 404 or 500 or 30X status code: means we didn't get the file. then display error message "Error: Cannot connect to the server!"
             // This is equivalent to both error & timeout events.
             else { 
-                
+                alert("Error: Cannot connect to the server!");
             }
             //10. Display rows data to the table
             
