@@ -104,7 +104,7 @@ function initApp(){
                 alert("Error: Cannot connect to the server!");
             }
             //10. Display rows data to the table
-            
+            tbody.textContent = tbodyrows;
             
             //11. Change button text to concatenate "Re-" to the existing text to display "Re-Load Data". Similar to Ex 9.1
             btnSubmit.TextContent = "Re-" + btnSubmitText;
