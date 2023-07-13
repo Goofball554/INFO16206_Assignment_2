@@ -45,56 +45,58 @@ function initApp(){
     var btnSubmit = document.getElementById("btnSubmit");
     var btnSubmitText = btnSubmit.textContent;
 
-    //1. Cache tbody, h3 & h3 text selectors: See Ex 9.1
+    //Cache tbody, h3 & h3 text selectors: 
     var tbody = document.getElementsByTagName("tbody")[0];
     var h3 = document.getElementsByTagName("h3")[0];
     var h3text = h3.textContent;
 
-    var url = "http://babanski.com/files/ajax/book_signing_event.json";
-
+    // var url = "http://babanski.com/files/ajax/book_signing_event.json";
+    // if the above url doesn't work on repl use the following url instead:
+    
+    var url = "https://infoa3server.mattiask.repl.co/json";
     var data = null;
-    var xhr = new XMLHttpRequest(); 
+    
+    //Create the xhr object 
+    var xhr = new XMLHttpRequest();
     
     // Create function triggered by each state change event 
     xhr.onreadystatechange = function (evt) { 
-         //2. Create variable to store all the rows data for <tbody> & initialize it to an empty string. 
-        var tbodyrows = "";
+      
+    // Create variable to store all the rows data for <tbody> & initialize it to an empty string. 
+    var tbodyrows = "";
 
         //If server connection established -> ready state = OPENED
         if (this.readyState == XMLHttpRequest.OPENED) {
             // Steps 3 to 5 - Refer to Ex 9.1 as an example
-            //3. Change button text to "Please Wait!" 
-            btnSubmit.textContent = "Please Wait!";
-            
-            //4. Reset text to an empty string inside <tbody> 
+            // Change button text to "Please Wait!" 
+		btnSubmit.textContent = "Please Wait!";
+           
+            // Reset text to an empty string inside <tbody> 
             tbody.innerHTML = "";
             
-            //5. Reset header to default text
+            // Reset header to default text
             h3.textContent = h3text;
-            
+
         } //If request finished & response ready -> ready state = DONE
         else if (this.readyState == XMLHttpRequest.DONE) {
             //If server returns "200" status code: we got the file
             if (this.status == 200) {
                // Convert JSON into JavaScript object
                data = JSON.parse(this.responseText);
-              
-              //var txt = '{"section": {"title": "New Authors in Canada", "signing": [{"author": {"title": "Mr.", "name": "Erick Riley" },	"book": {"title": "The Last Woman", "price": "$22.95" }}, {"author": {"title": "Dr.", "name": "Oliver Sacks"},		"book": {"title": "The Island", "price": "$12.95"}}]}}'
-              //var data = JSON.parse(txt);
                    
                // Check data is correct. i.e. data.section exists
                if (data && data.section) {
         
                     if (data.section.title) { //Check title exists
-                        //6. Change h3 header text to title from JSON
+                        // Change h3 header text to title from JSON
                         h3.textContent = data.section.title;
                     }
 
-                    //7. In rows variable, store rows data in table format
-                    //Note: Requires concatenating table HTML tags to the JSON data to create each row & cell.
+                    // In rows variable, store rows data in table format
+                    // Note: Requires concatenating table HTML tags to the JSON data to create each row & cell.
                     // Slow loop: .forEach - do not use
                     // Fastest loop: for(...)
-                    data2 = data.section.signing
+                    var data2 = data.section.signing
                     for (var i = 0; i < 2; i++)
                     {
                         tbodyrows += "<tr>";
@@ -103,24 +105,24 @@ function initApp(){
                         tbodyrows += "<td>" + data2[i].book.price + "</td>";
                         tbodyrows += "</tr>";
                     }
-                    
+
                } // This ends the "if (data.section)".
                else {
-                   //8. (else) If not able to parse data -> show "Error: Incorrect input received from the server!" error message.
+                   // (else) If not able to parse data -> show "Error: Incorrect input received from the server!" error message.
                    alert("Error: Incorrect input received from the server!");
                }
             } // This ends the "if (this.status == 200)"
-            //9. (else) If server returns 404 or 500 or 30X status code: means we didn't get the file. then display error message "Error: Cannot connect to the server!"
+            // (else) If server returns 404 or 500 or 30X status code: means we didn't get the file. then display error message "Error: Cannot connect to the server!"
             // This is equivalent to both error & timeout events.
             else { 
                 alert("Error: Cannot connect to the server!");
             }
-            //10. Display rows data to the table
+            // Display rows data to the table
             tbody.innerHTML = tbodyrows;
-            
-            //11. Change button text to concatenate "Re-" to the existing text to display "Re-Load Data". Similar to Ex 9.1
+
+            // Change button text to concatenate "Re-" to the existing text to display "Re-Load Data". Similar to Ex 9.1
             btnSubmit.textContent = "Re-" + btnSubmitText;
-            
+
         } // This ends the else if (this.readyState == XMLHttpRequest.DONE) 
     }; // This ends the onreadystatechange event handler
 
@@ -133,10 +135,10 @@ function initApp(){
         // If we use xhr.open("GET", url, true); then the browser will load from DISK cache!
         // To force loading JSON data from server & not cache we "create" dynamical URL by adding a parameter ?time_in_seconds
         xhr.open("GET", url + "?" + (new Date()).getTime(), true);
-       //In Internet Explorer, the timeout property may be set only after calling the open() method 
-       // and before calling the send() method.
-        xhr.timeout = 6000; 
-        xhr.send();
+       //In Internet Explorer, the timeout property may be set only after calling the open() method and before calling the send() method.
+       // Add timeout here then send the request to the server. 
+       xhr.timeout = 6000; 
+       xhr.send();
     };
 };
  
